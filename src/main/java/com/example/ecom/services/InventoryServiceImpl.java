@@ -46,6 +46,8 @@ public class InventoryServiceImpl implements InventoryService{
         User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User Not found"));
         if(user.getUserType() != UserType.ADMIN)
             throw new UnAuthorizedAccessException("ACCESS DENIED");
-        inventoryRepository.delete(inventoryRepository.findByProductId(productId).get());
+        Optional<Inventory> optionalInventory = inventoryRepository.findByProductId(productId);
+        if(optionalInventory.isPresent())
+            inventoryRepository.delete(optionalInventory.get());
     }
 }
